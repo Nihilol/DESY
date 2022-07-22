@@ -18,3 +18,6 @@ using TikzPictures
 using CurveFit
 using TexTables
 using Images
+
+#Hello 
+fit = abs
