@@ -60,9 +60,11 @@ function picking_files()
     # imshow(images[1])
 
     for image in images
-        for i in (1:500:size(image)[1])
+        for i in (1:1:size(image)[1])
             for l in (1:1:size(image)[2])
-                println(float(red(image[i, l])), raw", " , float(green(image[i, l])), raw", " , float(blue(image[i, l])))
+                if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) > 0.7
+                    println(Int(255*float(red(image[i, l]))), raw", " , Int(255*float(green(image[i, l]))), raw", " , Int(255*float(blue(image[i, l]))))
+                end
             end
         end
     end
