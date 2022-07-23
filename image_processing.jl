@@ -23,7 +23,9 @@ using Images
 
 function picking_files()
 
-    dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos";
+    dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
+
+    # dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos";
 
     files = open_dialog("Chose a file", GtkNullContainer(), String["*.jpg"], select_multiple=true)
 
@@ -57,20 +59,50 @@ function picking_files()
         push!(images, load(file))
     end
 
+    down_dimension = 7
+
     # imshow(images[1])
 
+    colours_init = zeros(RGB{Float64}, down_dimension, 250)
+
     for image in images
+        global k = 1
         for i in (1:1:size(image)[1])
             for l in (1:1:size(image)[2])
                 if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) > 0.7
-                    println(Int(255*float(red(image[i, l]))), raw", " , Int(255*float(green(image[i, l]))), raw", " , Int(255*float(blue(image[i, l]))))
+                    # println(Int(255*float(red(image[i, l]))), raw", " , Int(255*float(green(image[i, l]))), raw", " , Int(255*float(blue(image[i, l]))))
+                    for t in range(1, down_dimension)
+                        colours_init[t, k] = image[i, l]
+                    end
+                    global k += 1
                 end
             end
         end
     end
 
+    sch = RGB{Float64}(0.0, 0.0, 0.0)
+
+    indexArray = findall(x -> x == sch, colours_init)
+
+    for i in indexArray
+        println("There are ", i[2], " blue pixels in the photo")
+        global g = i[2]
+        break
+    end
+
+    colours = zeros(RGB{Float64}, down_dimension, g - 1)
+
+    for i in range(1, g - 1)
+        for t in range(1, down_dimension)
+            colours[t, i] = colours_init[1, i]
+        end
+    end
+
+    imshow(colours)
+
     return solvent, producer_material, pulses, entries
 end
+
 
 ##
 
