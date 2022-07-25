@@ -127,9 +127,6 @@ function picking_files()
     end
 
     if seperation_of_copies == true
-        global blue_seperator = b
-        global red_seperator = r
-        global green_seperator = g
         if colours_blue != empty
             for i in range(1, b - 1)
                 for l in range(i + 1, b - 1)
@@ -139,14 +136,12 @@ function picking_files()
                         for t in range(1, 10)
                             colours_blue[t, l] = RGB{Float64}(0.0, 0.0, 0.0)
                         end
-                        blue_seperator -= 1
-                        println(blue_seperator)
                     end
                 end
             end
             search = RGB{Float64}(0.0, 0.0, 0.0)
-            indexArray = findall(x -> x )
-            imshow(colours_blue)
+            indexArray_blue = findall(x -> x != search, colours_blue[1,:])
+            global blue_seperator = length(indexArray_blue)
             println(blue_seperator, " Is the corrected colour-scheme for blue.")
             colour_seperated_blue = zeros(RGB{Float64}, down_dimension, blue_seperator)
             w = 1
@@ -171,11 +166,12 @@ function picking_files()
                         for t in range(1, 10)
                             colours_red[t, l] = RGB{Float64}(0.0, 0.0, 0.0)
                         end
-                        red_seperator -= 1
-                        println(red_seperator)
                     end
                 end
             end
+            search = RGB{Float64}(0.0, 0.0, 0.0)
+            indexArray_red = findall(x -> x != search, colours_red[1,:])
+            global red_seperator = length(indexArray_red)
             println(red_seperator, " Is the corrected colour-scheme for red.")
             colour_seperated_red = zeros(RGB{Float64}, down_dimension, red_seperator)
             q = 1
@@ -192,7 +188,6 @@ function picking_files()
             println("There are no green pixels in this photo")
         end
         if colours_green != empty
-            println(length(colours_green[1]))
             for i in range(1, g - 1)
                 for l in range(i + 1, g - 1)
                     if float(green(colours_green[1, i])) - 0.00001 < float(green(colours_green[1, l])) < float(green(colours_green[1, i])) + 0.00001 && 
@@ -201,11 +196,24 @@ function picking_files()
                         for t in range(1, 10)
                             colours_green[t, l] = RGB{Float64}(0.0, 0.0, 0.0)
                         end
-                        green_seperator -= 1
                     end
                 end
             end
-            imshow(colours_green)
+            search = RGB{Float64}(0.0, 0.0, 0.0)
+            indexArray_green = findall(x -> x != search, colours_green[1,:])
+            global green_seperator = length(indexArray_green)
+            println(green_seperator, " Is the corrected colour-scheme for green.")
+            colour_seperated_green = zeros(RGB{Float64}, down_dimension, green_seperator)
+            e = 1
+            for i in range(1, g - 1)
+                if colours_green[1, i] != RGB{Float64}(0.0, 0.0, 0.0)
+                    for p in range(1, 10)
+                        colour_seperated_green[p, e] = colours_green[1, i]
+                    end
+                    e += 1
+                end
+            end
+            imshow(colour_seperated_green)
         else
             println("There are no green pixels in this photo")
         end
