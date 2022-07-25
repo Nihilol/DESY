@@ -143,11 +143,11 @@ function picking_files()
             indexArray_blue = findall(x -> x != search, colours_blue[1,:])
             global blue_seperator = length(indexArray_blue)
             println(blue_seperator, " Is the corrected colour-scheme for blue.")
-            colour_seperated_blue = zeros(RGB{Float64}, down_dimension, blue_seperator)
+            colour_seperated_blue = zeros(RGB{Float64}, Int(round(blue_seperator/10)), blue_seperator)
             w = 1
             for i in range(1, b - 1)
                 if colours_blue[1, i] != RGB{Float64}(0.0, 0.0, 0.0)
-                    for p in range(1, 10)
+                    for p in range(1, Int(round(blue_seperator/10)))
                         colour_seperated_blue[p, w] = colours_blue[1, i]
                     end
                     w += 1
@@ -160,9 +160,9 @@ function picking_files()
         if colours_red != empty
             for i in range(1, r - 1)
                 for l in range(i + 1, r - 1)
-                    if float(green(colours_red[1, i])) - 0.0001 < float(green(colours_red[1, l])) < float(green(colours_red[1, i])) + 0.0001 && 
-                        float(red(colours_red[1, i])) - 0.0001 < float(red(colours_red[1, l])) < float(red(colours_red[1, i])) + 0.0001 &&
-                        float(blue(colours_red[1, i])) - 0.0001 < float(blue(colours_red[1, l])) < float(blue(colours_red[1, i])) + 0.0001
+                    if float(green(colours_red[1, i])) - 0.00001 < float(green(colours_red[1, l])) < float(green(colours_red[1, i])) + 0.00001 && 
+                        float(red(colours_red[1, i])) - 0.00001 < float(red(colours_red[1, l])) < float(red(colours_red[1, i])) + 0.00001 &&
+                        float(blue(colours_red[1, i])) - 0.00001 < float(blue(colours_red[1, l])) < float(blue(colours_red[1, i])) + 0.00001
                         for t in range(1, 10)
                             colours_red[t, l] = RGB{Float64}(0.0, 0.0, 0.0)
                         end
@@ -173,11 +173,11 @@ function picking_files()
             indexArray_red = findall(x -> x != search, colours_red[1,:])
             global red_seperator = length(indexArray_red)
             println(red_seperator, " Is the corrected colour-scheme for red.")
-            colour_seperated_red = zeros(RGB{Float64}, down_dimension, red_seperator)
+            colour_seperated_red = zeros(RGB{Float64}, Int(round(red_seperator/10)), red_seperator)
             q = 1
             for i in range(1, r - 1)
                 if colours_red[1, i] != RGB{Float64}(0.0, 0.0, 0.0)
-                    for p in range(1, 10)
+                    for p in range(1, Int(round(red_seperator/10)))
                         colour_seperated_red[p, q] = colours_red[1, i]
                     end
                     q += 1
@@ -203,11 +203,11 @@ function picking_files()
             indexArray_green = findall(x -> x != search, colours_green[1,:])
             global green_seperator = length(indexArray_green)
             println(green_seperator, " Is the corrected colour-scheme for green.")
-            colour_seperated_green = zeros(RGB{Float64}, down_dimension, green_seperator)
+            colour_seperated_green = zeros(RGB{Float64}, Int(round(green_seperator/10)), green_seperator)
             e = 1
             for i in range(1, g - 1)
                 if colours_green[1, i] != RGB{Float64}(0.0, 0.0, 0.0)
-                    for p in range(1, 10)
+                    for p in range(1, Int(round(green_seperator/10)))
                         colour_seperated_green[p, e] = colours_green[1, i]
                     end
                     e += 1
