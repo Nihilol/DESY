@@ -23,9 +23,9 @@ using Images
 
 function picking_files()
 
-    dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
+    # dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
 
-    # dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos";
+    dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos";
 
     files = open_dialog("Chose a file", GtkNullContainer(), String["*.jpg"], select_multiple=true)
 
@@ -59,60 +59,96 @@ function picking_files()
         push!(images, load(file))
     end
 
-    down_dimension = 30
+    down_dimension = 10
 
-    length_of_colourscheme= 100
+    length_of_colourscheme= 16000
 
-    colours_init = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
+    colours_init_blue = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
+
+    colours_init_red = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
+
+    colours_init_green = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
+
+    
 
     for image in images
-        global k = 1
+        global b = 1
+        global r = 1
+        global g = 1
         for i in (1:1:size(image)[1])
             for l in (1:1:size(image)[2])
-                if float(red(image[i, l])) < 0.05 && float(green(image[i, l])) < 0.05 && float(blue(image[i, l])) > 0.7
-                    for t in range(1, Int(down_dimension/3))
-                        colours_init[t, k] = image[i, l]
+                if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) > 0.6
+                    for t in range(1, 10)
+                        colours_init_blue[t, b] = image[i, l]
                     end
-                    global k += 1
+                    global b += 1
                 end
-                # if float(red(image[i, l])) > 0.7 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) < 0.5
-                #     for t in range(Int(down_dimension/3 + 1), Int(down_dimension/3 + down_dimension/3))
-                #         colours_init[t, k] = image[i, l]
-                #     end
-                #     global k += 1
-                # end
-                # if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) > 0.7 && float(blue(image[i, l])) > 0.5
-                #     for t in range(Int(down_dimension/3 + down_dimension/3 + 1), Int(down_dimension))
-                #         colours_init[t, k] = image[i, l]
-                #     end
-                #     global k += 1
-                # end
-            end
+                if float(red(image[i, l])) > 0.85 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) < 0.5
+                    for t in range(1, 10)
+                        colours_init_red[t, r] = image[i, l]
+                    end
+                    global r += 1
+                end
+                if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) > 0.8 && float(blue(image[i, l])) < 0.5
+                    for t in range(1, 10)
+                        colours_init_green[t, g] = image[i, l]
+                    end
+                    global g += 1
+                end
+            end 
+        end
+        global b = b
+        global r = r
+        global g = g
+    end
+
+    println(b - 1, " Is the amount of blue. ", r - 1, " Is the amount of red. ",  g - 1, " Is the amount of green")
+
+    # sch = RGB{Float64}(0.0, 0.0, 0.0)
+
+    # indexArray = findall(x -> x == sch, colours_init_blue)
+
+    # for i in indexArray
+    #     println("There are ", i[2], " blue pixels in the photo")
+    #     global g = i[2]
+    #     break
+    # end
+
+    colours_blue = zeros(RGB{Float64}, down_dimension, b - 1)
+    colours_red = zeros(RGB{Float64}, down_dimension, r - 1)
+    colours_green = zeros(RGB{Float64}, down_dimension, g - 1)
+
+    for i in range(1, b - 1)
+        for t in range(1, down_dimension)
+            colours_blue[t, i] = colours_init_blue[1, i]
         end
     end
-
-    sch = RGB{Float64}(0.0, 0.0, 0.0)
-
-    indexArray = findall(x -> x == sch, colours_init)
-    
-    println(indexArray)
-
-    for i in indexArray
-        println("There are ", i[2], " blue pixels in the photo")
-        global g = i[2]
-        break
+    for i in range(1, r - 1)
+        for t in range(1, down_dimension)
+            colours_red[t, i] = colours_init_red[1, i]
+        end
     end
-
-    colours = zeros(RGB{Float64}, down_dimension, g - 1)
-
     for i in range(1, g - 1)
         for t in range(1, down_dimension)
-            colours[t, i] = colours_init[1, i]
+            colours_green[t, i] = colours_init_green[1, i]
         end
     end
 
-    imshow(colours)
-
+    if colours_blue != empty
+        imshow(colours_blue)
+    else
+        println("There are no blue pixels in this photo")
+    end
+    if colours_red != empty
+        imshow(colours_red)
+    else
+        println("There are no green pixels in this photo")
+    end
+    if colours_green != empty
+        imshow(colours_green)
+    else
+        println("There are no green pixels in this photo")
+    end
     return solvent, producer_material, pulses, entries
 end
 
