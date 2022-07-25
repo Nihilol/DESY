@@ -59,23 +59,34 @@ function picking_files()
         push!(images, load(file))
     end
 
-    down_dimension = 7
+    down_dimension = 30
 
-    # imshow(images[1])
+    length_of_colourscheme= 100
 
-    colours_init = zeros(RGB{Float64}, down_dimension, 250)
+    colours_init = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
 
     for image in images
         global k = 1
         for i in (1:1:size(image)[1])
             for l in (1:1:size(image)[2])
-                if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) > 0.7
-                    # println(Int(255*float(red(image[i, l]))), raw", " , Int(255*float(green(image[i, l]))), raw", " , Int(255*float(blue(image[i, l]))))
-                    for t in range(1, down_dimension)
+                if float(red(image[i, l])) < 0.05 && float(green(image[i, l])) < 0.05 && float(blue(image[i, l])) > 0.7
+                    for t in range(1, Int(down_dimension/3))
                         colours_init[t, k] = image[i, l]
                     end
                     global k += 1
                 end
+                # if float(red(image[i, l])) > 0.7 && float(green(image[i, l])) < 0.5 && float(blue(image[i, l])) < 0.5
+                #     for t in range(Int(down_dimension/3 + 1), Int(down_dimension/3 + down_dimension/3))
+                #         colours_init[t, k] = image[i, l]
+                #     end
+                #     global k += 1
+                # end
+                # if float(red(image[i, l])) < 0.5 && float(green(image[i, l])) > 0.7 && float(blue(image[i, l])) > 0.5
+                #     for t in range(Int(down_dimension/3 + down_dimension/3 + 1), Int(down_dimension))
+                #         colours_init[t, k] = image[i, l]
+                #     end
+                #     global k += 1
+                # end
             end
         end
     end
@@ -83,6 +94,8 @@ function picking_files()
     sch = RGB{Float64}(0.0, 0.0, 0.0)
 
     indexArray = findall(x -> x == sch, colours_init)
+    
+    println(indexArray)
 
     for i in indexArray
         println("There are ", i[2], " blue pixels in the photo")
