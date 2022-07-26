@@ -23,6 +23,10 @@ using Images
 
 function picking_files()
 
+    seperation_of_copies = true
+
+    show_plots == true
+
     solvent = String[]
 
     producer_material = String[]
@@ -40,8 +44,6 @@ function picking_files()
     colours_init_red = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
 
     colours_init_green = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
-
-    seperation_of_copies = true
 
     # dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
 
@@ -74,7 +76,7 @@ function picking_files()
     global b = 1
     global r = 1
     global g = 1
-
+    
 
     for image in images
         for i in (1:1:size(image)[1])
@@ -153,7 +155,9 @@ function picking_files()
                     w += 1
                 end
             end
-            imshow(colour_seperated_blue)
+            if show_plots == true
+                imshow(colour_seperated_blue)
+            end
         else
             println("There are no blue pixels in this photo")
         end
@@ -183,9 +187,11 @@ function picking_files()
                     q += 1
                 end
             end
-            imshow(colour_seperated_red)
+            if show_plots == true
+                imshow(colour_seperated_red)
+            end
         else
-            println("There are no green pixels in this photo")
+            println("There are no red pixels in this photo")
         end
         if colours_green != empty
             for i in range(1, g - 1)
@@ -213,18 +219,20 @@ function picking_files()
                     e += 1
                 end
             end
-            imshow(colour_seperated_green)
+            if show_plots == true
+                imshow(colour_seperated_green)
+            end
         else
-            println("There are no green pixels in this photo")
+            println("There are no green pixels in this photo.")
         end
     else
-        if colours_green != empty
+        if colours_green != empty && show_plots == true
             imshow(colours_green)
         end
-        if colours_red != empty
+        if colours_red != empty && show_plots == true
             imshow(colours_red)
         end
-        if colours_blue != empty
+        if colours_blue != empty && show_plots == true
             imshow(colours_blue)
         end
     end
