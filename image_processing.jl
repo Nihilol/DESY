@@ -265,7 +265,7 @@ function picking_files_and_plotting()
     end
     println(solvent_list, pulse_list)
 
-    fig1 = Scene()
+    fig1 = Figure()
     ax1 = Axis(fig1[1,1], xlabel = raw"Amount of pulses", ylabel = raw"Amount of Coloured Pixels in The Photo")
     GLMakie.scatter!(ax1, pulse_list, blue_pixels, markersize = 10, color = :black)
     GLMakie.scatter!(ax1, pulse_list, red_pixels, markersize = 10, color = :black)
