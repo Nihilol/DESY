@@ -23,9 +23,9 @@ using Images
 
 function picking_files()
 
-    seperation_of_copies = true
+    seperation_of_copies = false
 
-    show_plots == true
+    show_plots = false
 
     solvent = String[]
 
@@ -62,7 +62,6 @@ function picking_files()
         push!(producer_material, split(file_pick, raw"_")[2])
         push!(pulses, parse(Int64, split(file_pick, raw"_")[3][1:end-1]))
         push!(iterate_files, split(file_pick, raw"_")[1])
-
     end
 
     sort(pulses, rev = true)
@@ -236,10 +235,38 @@ function picking_files()
             imshow(colours_blue)
         end
     end
-    return solvent, producer_material, pulses, entries
+    return solvent, producer_material, pulses, entries, b, r, g
 end
 
 
 ##
 
-picking_files();
+
+function picking_files_and_plotting()
+
+    amount_of_photos = 4
+
+    solvent_list = []
+
+    pulse_list = []
+
+    blue_pixels = []
+
+    red_pixels = []
+
+    green_pixels = []
+
+    for i in range(1, amount_of_photos)
+        solvent, producer_material, pulses, entries, blue, red, green = picking_files()
+        push!(solvent_list, solvent[1])
+        push!(pulse_list, pulses[1])
+        push!(blue_pixels, blue[1])
+        push!(red_pixels, red[1])
+        push!(green_pixels, green[1])
+    end
+    println(solvent_list, pulse_list)
+    return 0
+end
+
+
+picking_files_and_plotting();
