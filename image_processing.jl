@@ -1,23 +1,22 @@
-using Statistics
-using DataFrames
-using GLMakie
-using CSV
+# using Statistics
+# using DataFrames
+# using CSV
 using Gtk
-using Tables
-using Polynomials
-using StatsPlots
-using HypothesisTests
-using Distributions
-using Symbolics
-using StatsBase
-using StatsModels
-using AbstractPlotting
-using ImageView
-using RandomNumbers
-using TikzPictures
-using CurveFit
-using TexTables
+# using Tables
+# using Polynomials
+# using StatsPlots
+# using HypothesisTests
+# using Distributions
+# using Symbolics
+# using StatsBase
+# using StatsModels
 using Images
+using ImageView
+# using RandomNumbers
+# using TikzPictures
+# using CurveFit
+# using TexTables
+using GLMakie
 
 ##
 
@@ -244,7 +243,7 @@ end
 
 function picking_files_and_plotting()
 
-    amount_of_photos = 4
+    amount_of_photos = 1
 
     solvent_list = []
 
@@ -265,6 +264,13 @@ function picking_files_and_plotting()
         push!(green_pixels, green[1])
     end
     println(solvent_list, pulse_list)
+
+    fig1 = Scene()
+    ax1 = Axis(fig1[1,1], xlabel = raw"Amount of pulses", ylabel = raw"Amount of Coloured Pixels in The Photo")
+    GLMakie.scatter!(ax1, pulse_list, blue_pixels, markersize = 10, color = :black)
+    GLMakie.scatter!(ax1, pulse_list, red_pixels, markersize = 10, color = :black)
+    GLMakie.scatter!(ax1, pulse_list, green_pixels, markersize = 10, color = :black)
+    display(fig1)
     return 0
 end
 
