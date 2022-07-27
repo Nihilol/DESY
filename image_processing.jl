@@ -26,9 +26,9 @@ dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coati
 
 function picking_files()
 
-    seperation_of_copies = false
+    seperation_of_copies = true
 
-    show_plots = false
+    show_plots = true
 
     solvent = String[]
 
