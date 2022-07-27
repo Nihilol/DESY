@@ -28,6 +28,8 @@ function picking_files()
 
     solvent = String[]
 
+    zoom = String[]
+
     producer_material = String[]
 
     iterate_files = []
@@ -61,6 +63,8 @@ function picking_files()
         push!(producer_material, split(file_pick, raw"_")[2])
         push!(pulses, parse(Int64, split(file_pick, raw"_")[3][1:end-1]))
         push!(iterate_files, split(file_pick, raw"_")[1])
+        # println(split(file_pick, raw"_")[5][1:end - 5])
+        push!(zoom, split(file_pick, raw"_")[5][1:end - 5])
     end
 
     sort(pulses, rev = true)
@@ -104,7 +108,8 @@ function picking_files()
         global g = g
     end
 
-    println(b - 1, " Is the amount of blue pixels. ", r - 1, " Is the amount of red pixels. ",  g - 1, " Is the amount of green pixels.")
+    println(b - 1, " Is the amount of blue pixels, ", r - 1, " Is the amount of red pixels, ",  g - 1, " Is the amount of green pixels, with solvent: ",
+                             solvent[1], ", at ", pulses[1], " number of pulses, with ", zoom[1], " zoom.")
 
     colours_blue = zeros(RGB{Float64}, down_dimension, b - 1)
     colours_red = zeros(RGB{Float64}, down_dimension, r - 1)
@@ -243,33 +248,35 @@ end
 
 function picking_files_and_plotting()
 
-    amount_of_photos = 1
+    amount_of_photos = 4
 
-    solvent_list = []
+    solvent_list = String[]
 
-    pulse_list = []
+    pulse_list = Float32[]
 
-    blue_pixels = []
+    blue_pixels = Float32[]
 
-    red_pixels = []
+    red_pixels = Float32[]
 
-    green_pixels = []
+    green_pixels = Float32[]
 
     for i in range(1, amount_of_photos)
-        solvent, producer_material, pulses, entries, blue, red, green = picking_files()
+        solvent, producer_material, pulses, entries, blue, red, green = picking_files();
         push!(solvent_list, solvent[1])
         push!(pulse_list, pulses[1])
         push!(blue_pixels, blue[1])
         push!(red_pixels, red[1])
         push!(green_pixels, green[1])
     end
-    println(solvent_list, pulse_list)
 
-    fig1 = Figure()
-    ax1 = Axis(fig1[1,1], xlabel = raw"Amount of pulses", ylabel = raw"Amount of Coloured Pixels in The Photo")
-    GLMakie.scatter!(ax1, pulse_list, blue_pixels, markersize = 10, color = :black)
-    GLMakie.scatter!(ax1, pulse_list, red_pixels, markersize = 10, color = :black)
-    GLMakie.scatter!(ax1, pulse_list, green_pixels, markersize = 10, color = :black)
+
+    fig1 = GLMakie.Figure()
+    ax1 = GLMakie.Axis(fig1[1,1], xlabel = raw"Pulse number", ylabel = raw"Amount of Coloured Pixels in The Photo")
+    GLMakie.scatter!(ax1, pulse_list, blue_pixels, markersize = 10, color = :blue, label = "Blue pixels")
+    GLMakie.scatter!(ax1, pulse_list, red_pixels, markersize = 10, color = :red, label = "Red pixels")
+    GLMakie.scatter!(ax1, pulse_list, green_pixels, markersize = 10, color = :green, label = "Green pixels")
+    axislegend(ax1, position=:lt, labelsize = 30)
+
     display(fig1)
     return 0
 end
