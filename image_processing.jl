@@ -20,6 +20,10 @@ using GLMakie
 
 ##
 
+# dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
+
+dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos"
+
 function picking_files()
 
     seperation_of_copies = false
@@ -45,10 +49,6 @@ function picking_files()
     colours_init_red = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
 
     colours_init_green = zeros(RGB{Float64}, down_dimension, length_of_colourscheme)
-
-    # dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
-
-    dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos";
 
     files = open_dialog("Chose a file", GtkNullContainer(), String["*.jpg"], select_multiple=true)
 
@@ -239,7 +239,7 @@ function picking_files()
             imshow(colours_blue)
         end
     end
-    return solvent, producer_material, pulses, entries, b, r, g
+    return solvent, producer_material, pulses, entries, b, r, g, zoom
 end
 
 
@@ -260,13 +260,16 @@ function picking_files_and_plotting()
 
     green_pixels = Float32[]
 
+    zoom_list = String[]
+
     for i in range(1, amount_of_photos)
-        solvent, producer_material, pulses, entries, blue, red, green = picking_files();
+        solvent, producer_material, pulses, entries, blue, red, green, zoom = picking_files();
         push!(solvent_list, solvent[1])
         push!(pulse_list, pulses[1])
         push!(blue_pixels, blue[1])
         push!(red_pixels, red[1])
         push!(green_pixels, green[1])
+        push!(zoom_list, zoom[1])
     end
 
 
@@ -276,6 +279,12 @@ function picking_files_and_plotting()
     GLMakie.scatter!(ax1, pulse_list, red_pixels, markersize = 10, color = :red, label = "Red pixels")
     GLMakie.scatter!(ax1, pulse_list, green_pixels, markersize = 10, color = :green, label = "Green pixels")
     axislegend(ax1, position=:lt, labelsize = 30)
+
+    title_of_plot = string(dataframe_path, raw"\Graphs\\", solvent_list[1], raw"_", zoom_list[1], raw"s", raw".png")
+
+    println(title_of_plot)
+
+    Makie.save(title_of_plot, fig1)
 
     display(fig1)
     return 0
