@@ -7,7 +7,7 @@ using Gtk
 # using StatsPlots
 # using HypothesisTests
 # using Distributions
-# using Symbolics
+using Symbolics
 # using StatsBase
 # using StatsModels
 using Images
@@ -17,18 +17,28 @@ using ImageView
 # using CurveFit
 # using TexTables
 using GLMakie
+using Flux
+using HCubature
 
 ##
+
+pick_files = false
+
+density_calculations = true
+
+## 
+
 
 # dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
 
 dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos"
 
+
 function picking_files()
 
-    seperation_of_copies = true
+    seperation_of_copies = false
 
-    show_plots = true
+    show_plots = false
 
     solvent = String[]
 
@@ -248,7 +258,7 @@ end
 
 function picking_files_and_plotting()
 
-    amount_of_photos = 4
+    amount_of_photos = 3
 
     solvent_list = String[]
 
@@ -291,4 +301,23 @@ function picking_files_and_plotting()
 end
 
 
-picking_files_and_plotting();
+function gaussian_calculations()
+    σ_x = 1
+    σ_y = 1
+    x_0 = 0
+    y_0 = 0
+    A = 10
+    f(x, y) = A*exp(-((x-x_0)^2/(2*σ_x^2) + (y-y_0)^2/(2*σ_y^2)))
+    f(v) = f(v...)
+    a0, b0 = 0, 1
+    a1, b1 = 0, 2
+    println(hcubature(f, (a0, a1), (b0, b1)))
+end
+
+if pick_files == true
+    picking_files_and_plotting();
+end
+
+if density_calculations == true
+    gaussian_calculations();
+end
