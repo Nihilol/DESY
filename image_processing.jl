@@ -301,23 +301,40 @@ function picking_files_and_plotting()
 end
 
 
-function gaussian_calculations()
-    σ_x = 1
-    σ_y = 1
-    x_0 = 0
-    y_0 = 0
-    A = 10
-    f(x, y) = A*exp(-((x-x_0)^2/(2*σ_x^2) + (y-y_0)^2/(2*σ_y^2)))
-    f(v) = f(v...)
-    a0, b0 = 0, 1
-    a1, b1 = 0, 2
-    println(hcubature(f, (a0, a1), (b0, b1)))
-end
+##
 
 if pick_files == true
     picking_files_and_plotting();
 end
 
 if density_calculations == true
-    gaussian_calculations();
+    function calc_dens(n, σ_x, σ_y, A, x_0, y_0)
+        density = 1
+        mass = 600
+        function peaks()
+            aa = LinRange(-15, 15, n)
+            bb = LinRange(-15, 15, n)
+            g = [A * exp.(-(((a.-x_0).^2)/(2*σ_x^2) + ((b.-y_0).^2)/(2*σ_y^2))) for a in aa, b in bb]
+            return (aa, bb, g)
+        end
+        f(x, y) = A*exp(-((x-x_0)^2/(2*σ_x^2) + (y-y_0)^2/(2*σ_y^2)))
+        f(v) = f(v...)
+        a0, b0 = -10, 10
+        a1, b1 = -10, 10
+        area = hcubature(f, (a0, a1), (b0, b1))[1]
+        if mass/density - 1 < area < mass/density + 1
+            a, b, c = peaks()
+            fig1 = Figure()
+            ax1 = GLMakie.Axis3(fig1[1, 1])
+            hm = GLMakie.surface!(ax1, a, b, c)
+            Colorbar(fig1[1, 2], hm, height=Relative(0.5))
+            display(fig1)
+        end
+        return σ_x, σ_y, A
+    end
+    for i in (0.1:2)
+        for j in (1:100)
+            calc_dens(49, i, i, j, 0, 0);
+        end
+    end
 end
