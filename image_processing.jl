@@ -1,8 +1,8 @@
 # using Statistics
-# using DataFrames
-# using CSV
+using DataFrames
+using CSV
 using Gtk
-# using Tables
+using Tables
 # using Polynomials
 # using StatsPlots
 # using HypothesisTests
@@ -22,10 +22,11 @@ using HCubature
 
 ##
 
-pick_files = false
+pick_images = false
 
-density_calculations = true
+density_calculations = false
 
+pick_csvs = true
 ## 
 
 
@@ -34,7 +35,7 @@ density_calculations = true
 dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos"
 
 
-function picking_files()
+function picking_images()
 
     seperation_of_copies = false
 
@@ -256,7 +257,7 @@ end
 ##
 
 
-function picking_files_and_plotting()
+function picking_images_and_plotting()
 
     amount_of_photos = 3
 
@@ -273,7 +274,7 @@ function picking_files_and_plotting()
     zoom_list = String[]
 
     for i in range(1, amount_of_photos)
-        solvent, producer_material, pulses, entries, blue, red, green, zoom = picking_files();
+        solvent, producer_material, pulses, entries, blue, red, green, zoom = picking_images();
         push!(solvent_list, solvent[1])
         push!(pulse_list, pulses[1])
         push!(blue_pixels, blue[1])
@@ -303,8 +304,8 @@ end
 
 ##
 
-if pick_files == true
-    picking_files_and_plotting();
+if pick_images == true
+    picking_images_and_plotting();
 end
 
 if density_calculations == true
@@ -338,3 +339,71 @@ if density_calculations == true
         end
     end
 end
+
+function picking_csv_and_plotting()
+    data_frame_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\SE CSV Files"
+
+    files = open_dialog("Chose a file", GtkNullContainer(), String["*.csv"], select_multiple=true)
+
+    entries = readdir(data_frame_path, join = true)
+
+    pulses = []
+
+    dates = []
+
+    coating = []
+
+    total_files = []
+
+
+
+    for file_pick in files
+        push!(pulses, split(split(file_pick, raw"_")[1], raw"\\")[end])
+        push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
+        push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
+        println(pulses, dates, coating)
+    end
+    for file in entries, i in eachindex(pulses)
+        if occursin(pulses[i], file) && occursin(dates[i], file) && occursin(coating[i], file)
+            push!(total_files, file)
+        end
+    end
+    println(total_files)
+
+    global figure = Figure()
+
+    global axis = GLMakie.Axis(figure[1, 1])
+
+    for file in total_files
+
+        Dataframe = DataFrame(CSV.File(file))
+
+        df = Dataframe[:, 1]
+
+        Wavelength = Float32[]
+
+        Intensity = Float32[]
+
+        for i in eachindex(df)
+            if i == 1
+                i = 2
+            end
+            push!(Wavelength, parse(Float64, df[i][1:10]))
+            push!(Intensity, parse(Float64, df[i][12:18]))
+        end
+
+        colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1]
+
+        
+
+        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3)
+        println("Another has been added")
+    end
+    display(figure)
+end
+
+if pick_csvs == true
+    picking_csv_and_plotting();
+end
+
+
