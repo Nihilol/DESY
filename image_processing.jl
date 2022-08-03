@@ -362,6 +362,7 @@ function picking_csv_and_plotting()
         push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
         push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
     end
+    
     for file in entries, i in eachindex(pulses)
         if occursin(pulses[i], file) && occursin(dates[i], file) && occursin(coating[i], file)
             push!(total_files, file)
