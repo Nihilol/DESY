@@ -355,20 +355,18 @@ function picking_csv_and_plotting()
 
     total_files = []
 
-
+    place = []
 
     for file_pick in files
         push!(pulses, split(split(file_pick, raw"_")[1], raw"\\")[end])
         push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
         push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
-        println(pulses, dates, coating)
     end
     for file in entries, i in eachindex(pulses)
         if occursin(pulses[i], file) && occursin(dates[i], file) && occursin(coating[i], file)
             push!(total_files, file)
         end
     end
-    println(total_files)
 
     global figure = Figure()
 
@@ -384,6 +382,10 @@ function picking_csv_and_plotting()
 
         Intensity = Float32[]
 
+        place = split(split(file, raw"_")[3], raw"\\")[1]
+
+        pulse = split(split(file, raw"_")[1], raw"\\")[end]
+
         for i in eachindex(df)
             if i == 1
                 i = 2
@@ -394,11 +396,14 @@ function picking_csv_and_plotting()
 
         colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1]
 
-        
+        label = string(place, raw" and ", pulse)
 
-        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3)
-        println("Another has been added")
+        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3, label = label)
+
     end
+
+    axislegend(axis, position=:rt, labelsize = 10)
+
     display(figure)
 end
 
