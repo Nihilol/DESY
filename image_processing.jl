@@ -19,6 +19,9 @@ using ImageView
 using GLMakie
 using Flux
 using HCubature
+using ColorSchemes
+using ColorBrewer
+using Colors
 
 ##
 
@@ -362,7 +365,7 @@ function picking_csv_and_plotting()
         push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
         push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
     end
-    
+
     for file in entries, i in eachindex(pulses)
         if occursin(pulses[i], file) && occursin(dates[i], file) && occursin(coating[i], file)
             push!(total_files, file)
@@ -372,6 +375,8 @@ function picking_csv_and_plotting()
     global figure = Figure()
 
     global axis = GLMakie.Axis(figure[1, 1])
+
+    color = 1
 
     for file in total_files
 
@@ -395,11 +400,13 @@ function picking_csv_and_plotting()
             push!(Intensity, parse(Float64, df[i][12:18]))
         end
 
-        colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1]
+        colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1, :orange, :pink, :red, :blue, :green, :yellow, :orange, :black]
 
         label = string(place, raw" and ", pulse)
 
-        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3, label = label)
+        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3, label = label, color = colours[color])
+
+        color += 1
 
     end
 
