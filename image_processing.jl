@@ -25,6 +25,9 @@ using Colors
 
 ##
 
+
+user = splitdir(homedir())[end]
+
 home = true
 
 pick_images = false
@@ -37,10 +40,10 @@ compress_files = true
 
 ## 
 
-if home == true
-    dataframe_path = raw"C:\Users\olive\Desktop\Uni\Extra Programs\DESY\CSVs"
-else
+if user == "liebeoli"
     dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\SE CSV Files"
+else
+    dataframe_path = raw"C:\Users\olive\Desktop\Uni\Extra Programs\DESY\CSVs"
 end
 
 
