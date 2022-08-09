@@ -37,6 +37,8 @@ pick_csvs = false
 
 compress_files = true
 
+plot_averaged = true
+
 ## 
 
 if user == "liebeoli"
@@ -488,18 +490,30 @@ function average_files()
         average = 0
         for j in (1:lengths)
             average += Intensity[j, i]
+
         end
         push!(average_intensity, average/lengths)
     end
-    println(typeof(average_intensity))
-    name_of_file_intensity = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw".csv")
-    name_of_file_wavelengths = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw"_wavelength", raw".csv")
-    CSV.write(name_of_file_intensity, DataFrame([average_intensity], [:intensity]))
-    CSV.write(name_of_file_wavelengths, DataFrame([average_wavelength], [:wavelength]))
+    name_of_file = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw".csv")
+    df = DataFrame(
+        intensity = average_intensity, wavelength = average_wavelength
+    )
+    CSV.write(name_of_file, df)
+    println("This file has been added to Averaged files: ", name_of_file_intensity)
+    return 
 end
 
 if compress_files == true
     average_files()
 end
 
+##
 
+function plot_averages()
+    files = open_dialog("Chose a file", GtkNullContainer(), String["*.csv"], select_multiple=true)
+    wavelength = DataFrame(CSV.File(string(dataframe_path, raw"\\", raw"Averaged", raw"\\", raw"75p_CNF_5_8_wavelength.csv")))
+end
+
+if plot_averaged == true
+    plot_averages()
+end
