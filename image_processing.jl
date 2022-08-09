@@ -3,6 +3,7 @@ using DataFrames
 using CSV
 using Gtk
 using Tables
+using Statistics
 # using Polynomials
 # using StatsPlots
 # using HypothesisTests
@@ -27,8 +28,6 @@ using Colors
 
 
 user = splitdir(homedir())[end]
-
-home = true
 
 pick_images = false
 
@@ -457,8 +456,46 @@ function average_files()
             push!(total_files, file)
         end
     end
-    println(total_files)
-    return 0
+
+    lengths = length(total_files)
+
+    Wavelength = zeros(lengths, 514)
+
+    Intensity = zeros(lengths, 514)
+
+    j = 1
+
+    for file in total_files
+
+        Dataframe = DataFrame(CSV.File(file))
+
+        df = Dataframe[:, 1]
+
+        for i in eachindex(df)
+            if i == 1
+                i = 2
+            end
+            Wavelength[j, i] = parse(Float64, df[i][1:10])
+            Intensity[j, i] = parse(Float64, df[i][12:18])
+        end
+
+        j += 1
+
+    end
+    average_wavelength = Wavelength[1, 2:end]
+    average_intensity = Vector{Float64}();
+    for i in (2:514)
+        average = 0
+        for j in (1:lengths)
+            average += Intensity[j, i]
+        end
+        push!(average_intensity, average/lengths)
+    end
+    println(typeof(average_intensity))
+    name_of_file_intensity = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw".csv")
+    name_of_file_wavelengths = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw"_wavelength", raw".csv")
+    CSV.write(name_of_file_intensity, DataFrame([average_intensity], [:intensity]))
+    CSV.write(name_of_file_wavelengths, DataFrame([average_wavelength], [:wavelength]))
 end
 
 if compress_files == true
