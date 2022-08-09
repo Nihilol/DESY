@@ -25,17 +25,23 @@ using Colors
 
 ##
 
+home = true
+
 pick_images = false
 
 density_calculations = false
 
-pick_csvs = true
+pick_csvs = false
+
+compress_files = true
+
 ## 
 
-
-# dataframe_path = raw"C:\Users\olive\Desktop\Uni\Summer Programs\DESY\Photos"
-
-dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Photos"
+if home == true
+    dataframe_path = raw"C:\Users\olive\Desktop\Uni\Extra Programs\DESY\CSVs"
+else
+    dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\SE CSV Files"
+end
 
 
 function picking_images()
@@ -343,6 +349,8 @@ if density_calculations == true
     end
 end
 
+##
+
 function picking_csv_and_plotting()
     data_frame_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\SE CSV Files"
 
@@ -417,6 +425,41 @@ end
 
 if pick_csvs == true
     picking_csv_and_plotting();
+end
+
+##
+
+function average_files()
+
+    files = open_dialog("Chose a file", GtkNullContainer(), String["*.csv"], select_multiple=true)
+
+    entries = readdir(dataframe_path, join = true)
+
+    pulses = []
+
+    dates = []
+
+    coating = []
+
+    total_files = []
+
+    for file_pick in files
+        push!(pulses, split(split(file_pick, raw"_")[1], raw"\\")[end])
+        push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
+        push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
+    end
+
+    for file in entries, i in eachindex(pulses)
+        if occursin(pulses[i], file) && occursin(dates[i], file) && occursin(coating[i], file)
+            push!(total_files, file)
+        end
+    end
+    println(total_files)
+    return 0
+end
+
+if compress_files == true
+    average_files()
 end
 
 
