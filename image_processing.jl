@@ -35,7 +35,7 @@ density_calculations = false
 
 pick_csvs = false
 
-compress_files = false
+compress_files = true
 
 plot_averaged = true
 
@@ -486,18 +486,18 @@ function average_files()
     end
     average_wavelength = Wavelength[1, 2:end]
     average_intensity = Vector{Float64}();
-    std_list = Vector{Float64}();
+    sem_list = Vector{Float64}();
     for i in (2:514)
         average = 0
         for j in (1:lengths)
             average += Intensity[j, i]
         end
-        push!(std_list, std(Intensity[1:end, i]))
+        push!(sem_list, std(Intensity[1:end, i])/(sqrt(13)))
         push!(average_intensity, average/lengths)
     end
     name_of_file = string(dataframe_path, raw"\\", raw"Averaged", raw"\\", pulses[1], raw"_", coating[1], raw"_", dates[1], raw".csv")
     df = DataFrame(
-        intensity = average_intensity, wavelength = average_wavelength, std = std_list
+        intensity = average_intensity, wavelength = average_wavelength, sem = sem_list
     )
     CSV.write(name_of_file, df)
     println("This file has been added to Averaged files: ", name_of_file)
@@ -529,12 +529,12 @@ function plot_averages()
             wavelength = _.wavelength
         end
         @chain df begin
-            std = _.std
+            sem = _.sem
         end
         @chain df begin
             intensity = _.intensity
         end
-        errorbars!(axis, wavelength, intensity, std, whiskerwidth = 1, linewidth = 0.5,
+        errorbars!(axis, wavelength, intensity, sem, whiskerwidth = 5, linewidth = 0.3,
         direction = :y, color = :black)
         GLMakie.scatter!(axis, wavelength, intensity, markersize = 5, color = colours[i], label = string(pulse))
         i += 1
