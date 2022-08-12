@@ -1,0 +1,31 @@
+{
+    "InternalPDFViewer": {
+        "Embedded": true,
+        "File": "Functional Cellulose-Ligning-Coating on Porous Materials.pdf"
+    },
+    "Session": {
+        "Bookmarks": [
+        ],
+        "CurrentFile": "Functional Cellulose-Ligning-Coating on Porous Materials.tex",
+        "FileVersion": 1,
+        "Files": [
+            {
+                "Col": 19,
+                "EditorGroup": 0,
+                "FileName": "Functional Cellulose-Ligning-Coating on Porous Materials.tex",
+                "FirstLine": 54,
+                "FoldedLines": "",
+                "Line": 87
+            },
+            {
+                "Col": 24,
+                "EditorGroup": 0,
+                "FileName": "../../../../AppData/Local/Programs/MiKTeX/tex/latex/mhchem/mhchem.sty",
+                "FirstLine": 0,
+                "FoldedLines": "",
+                "Line": 64
+            }
+        ],
+        "MasterFile": ""
+    }
+}
