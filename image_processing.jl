@@ -33,7 +33,7 @@ pick_images = false
 
 density_calculations = false
 
-pick_csvs = false
+pick_csvs = true
 
 compress_files = true
 
@@ -416,7 +416,7 @@ function picking_csv_and_plotting()
 
         label = string(place, raw" and ", pulse)
 
-        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3, label = label, color = colours[color])
+        GLMakie.scatterlines!(axis, Wavelength, Intensity, markersize = 3, label = label)
 
         color += 1
 
