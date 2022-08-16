@@ -1,0 +1,106 @@
+\documentclass{book}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[lmargin=1.5in, rmargin = 1in, bmargin = 1.5in]{geometry}
+\usepackage{placeins}
+\usepackage{comment}
+\usepackage{bigints}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{threeparttable}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{todonotes}
+\usepackage{amsmath}    
+\pagestyle{fancy}
+\usepackage{makecell}
+\usepackage{pgf}
+\usepackage{float}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{hyperref}
+\graphicspath{{./Pictures/}}
+\usepackage{subfiles}
+\usepackage{wrapfig}
+\usepackage{lipsum}
+\usepackage{listings}
+\usepackage{nccmath}
+\usepackage{url}
+\usepackage{cancel}
+\usepackage{import}
+\usepackage{braket}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{sidecap}
+\numberwithin{equation}{section}
+\usepackage{listings}
+\usepackage{cleveref}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%%
+%% Julia definition (c) 2014 Jubobs
+%%
+
+
+\setcounter{tocdepth}{2}
+
+\lstdefinelanguage{Julia}%
+{morekeywords={abstract,break,case,catch,const,continue,do,else,elseif,%
+		end,export,false,for,function,immutable,import,importall,if,in,%
+		macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+		using,while},%
+	sensitive=true,%
+	alsoother={\$},%
+	morecomment=[l]\#,%
+	morecomment=[n]{\#=}{=\#},%
+	morestring=[s]{"}{"},%
+	morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
+\lstdefinestyle{mystyle}{%
+	language         = Julia,
+	keywordstyle     = \bfseries\color{blue},
+	stringstyle      = \color{codepurple},
+	commentstyle     = \color{codegreen},
+	%backgroundcolor  = \color{backcolour}
+	showstringspaces = false,
+	numberstyle		 =\small\color{black},
+	basicstyle		 =\ttfamily,
+	breakatwhitespace=false,
+	breaklines		 =true,
+	captionpos		 =t,
+	keepspaces		 =true,
+	numbers		 	 =left,
+	numbersep	  	 =5pt,
+	showspaces		 =false,
+	showstringspaces =false,
+	showtabs		 =false,
+	tabsize			 =2
+}
+
+\lstset{style=mystyle}
+
+\DeclareMathOperator{\Tr}{Tr}
+
+\renewcommand{\baselinestretch}{1.5} 
+\lhead{Oliver Liebe}
+\chead{}
+\rhead{22/7 - 2022}
+
+\begin{document}
+\frontmatter
+\title      {Functional Cellulose-Lignin-Coating on Porous Materials}
+\maketitle
+\backmatter
+\end{document}
