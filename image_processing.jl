@@ -33,16 +33,19 @@ pick_images = false
 
 density_calculations = false
 
-pick_csvs = true
+pick_csvs = false
 
 compress_files = true
 
 plot_averaged = true
 
+plot_weight = true
+
 ## 
 
 if user == "liebeoli"
     dataframe_path = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\SE CSV Files"
+    weights_file = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Self-written Materials\LaTeX Documents\Weights.csv"
 else
     dataframe_path = raw"C:\Users\olive\Desktop\Uni\Extra Programs\DESY\CSVs"
 end
@@ -449,7 +452,7 @@ function average_files()
 
     for file_pick in files
         push!(pulses, split(split(file_pick, raw"_")[1], raw"\\")[end])
-        push!(dates, string(split(split(file_pick, raw"_")[4], raw"\\")[1], raw"_",  split(split(file_pick, raw"_")[5], raw"\\")[1][1:end-4]))
+        push!(dates, string(split(split(file_pick, raw"_")[3], raw"\\")[1]))
         push!(coating, split(split(file_pick, raw"_")[2], raw"\\")[1])
     end
 
@@ -514,16 +517,24 @@ function plot_averages()
 
     global figure = Figure()
 
-    global axis = GLMakie.Axis(figure[1, 1])
+    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Wavelength", ylabel = raw"Transmitted Intensity", xlabelsize = 30, ylabelsize = 30)
 
-    colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1]
+    colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1, :red, :yellow]
 
     files = open_dialog("Chose a file", GtkNullContainer(), String["*.csv"], select_multiple=true)
 
+    pulses = ""
+
+    labels = []
 
     i = 1
     for file in files
-        pulse = split(split(file, raw"_")[1], raw"\\")[end]
+        if string(split(split(file, raw"_")[2], raw"\\")[end]) == raw"LCNF"
+            label = string(split(split(file, raw"_")[2], raw"\\")[end], raw" " , split(split(file, raw"_")[3], raw"\\")[end])
+        else
+            label = raw"LNCF 0p"
+        end
+        push!(labels, label)
         df = CSV.File(file)
         @chain df begin
             wavelength = _.wavelength
@@ -536,13 +547,53 @@ function plot_averages()
         end
         errorbars!(axis, wavelength, intensity, sem, whiskerwidth = 5, linewidth = 0.3,
         direction = :y, color = :black)
-        GLMakie.scatter!(axis, wavelength, intensity, markersize = 5, color = colours[i], label = string(pulse))
+        GLMakie.scatter!(axis, wavelength, intensity, markersize = 5, color = colours[i])
         i += 1
+        pulses = string(pulses, raw"_" , String(split(split(file, raw"_")[1], raw"\\")[end]))
     end
-    axislegend(axis, position=:rt, labelsize = 30)
+
+    group_size = [MarkerElement(marker = :circle, color = colour,
+    strokecolor = :transparent,
+    markersize = 40) for colour in colours]
+
+
+    Legend(figure[1, 1],
+    [group_size],
+    [string.(labels)],
+    ["Solution and Number of Pulses"], halign = :right, valign = :bottom, orientation = :horizontal, tellheight = false, tellwidth = false, margin = (10, 10, 60, 40))
+
+    #figure[1,2] = legend
+
+    #axislegend(axis, position=:rb, labelsize = 30, markersize = 80)
+
     display(figure)
+    destination = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Self-written Materials\LaTeX Documents"
+    full_title = string(destination, raw"\\" , pulses, raw".png")
+    Makie.save(full_title, figure)
 end
 
 if plot_averaged == true
     plot_averages()
+end
+
+##
+
+function plot_weights()
+    df = CSV.File(weights_file)
+    @chain df begin
+        pulse = _.pulse
+    end
+    @chain df begin
+        weight_diff = _.weight_diff
+    end
+    global figure = Figure()
+    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Number of Pulses", ylabel = raw"Weight in grams", xlabelsize = 30, ylabelsize = 30)
+    GLMakie.lines!(axis, pulse, weight_diff, markersize = 5)
+    display(figure)
+    full_title = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Self-written Materials\LaTeX Documents\Weights_graph.png"
+    Makie.save(full_title, figure)
+end
+
+if plot_weight == true
+    plot_weights()
 end
