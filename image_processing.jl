@@ -517,7 +517,8 @@ function plot_averages()
 
     global figure = Figure()
 
-    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Wavelength", ylabel = raw"Transmitted Intensity", xlabelsize = 30, ylabelsize = 30)
+    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Wavelength", ylabel = raw"Transmitted Intensity", xlabelsize = 30, ylabelsize = 30,
+    title = raw"Lignin Deposits on CNF coatings: 60 Pulses", titlesize = 30)
 
     colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1, :red, :yellow]
 
@@ -560,7 +561,7 @@ function plot_averages()
     Legend(figure[1, 1],
     [group_size],
     [string.(labels)],
-    ["Solution and Number of Pulses"], halign = :right, valign = :bottom, orientation = :horizontal, tellheight = false, tellwidth = false, margin = (10, 10, 60, 40))
+    ["Solution and Number of Pulses"], halign = :right, valign = :bottom, orientation = :horizontal, tellheight = false, tellwidth = false, margin = (10, 31, 18, 40))
 
     #figure[1,2] = legend
 
@@ -587,7 +588,8 @@ function plot_weights()
         weight_diff = _.weight_diff
     end
     global figure = Figure()
-    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Number of Pulses", ylabel = raw"Weight in grams", xlabelsize = 30, ylabelsize = 30)
+    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Number of Pulses", ylabel = raw"Weight in grams", xlabelsize = 30, ylabelsize = 30,
+    title = raw"Weight of coating based on number of pulses", titlesize = 30)
     GLMakie.lines!(axis, pulse, weight_diff, markersize = 5)
     display(figure)
     full_title = raw"C:\Users\liebeoli\Desktop\Functional Cellulose-lignin-coating on Porous Materials\Self-written Materials\LaTeX Documents\Weights_graph.png"
