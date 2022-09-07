@@ -518,7 +518,7 @@ function plot_averages()
     global figure = Figure()
 
     global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Wavelength", ylabel = raw"Transmitted Intensity", xlabelsize = 30, ylabelsize = 30,
-    title = raw"Lignin Deposits on CNF coatings: 60 Pulses", titlesize = 30)
+    title = raw"Lignin Deposits on 60 pulse CNF Coating", titlesize = 30)
 
     colours = [:crimson, :dodgerblue, :slateblue1, :sienna1, :orchid1, :red, :yellow]
 
@@ -531,9 +531,9 @@ function plot_averages()
     i = 1
     for file in files
         if string(split(split(file, raw"_")[2], raw"\\")[end]) == raw"LCNF"
-            label = string(split(split(file, raw"_")[2], raw"\\")[end], raw" " , split(split(file, raw"_")[3], raw"\\")[end])
+            label = string(raw"Ethanol Lignin", raw" " , split(split(file, raw"_")[3], raw"\\")[end])
         else
-            label = raw"LNCF 0p"
+            label = raw"Ethanol Lignin 0p"#string(raw"CNF", raw" ", split(split(file, raw"_")[1], raw"\\")[end])
         end
         push!(labels, label)
         df = CSV.File(file)
@@ -561,7 +561,7 @@ function plot_averages()
     Legend(figure[1, 1],
     [group_size],
     [string.(labels)],
-    ["Solution and Number of Pulses"], halign = :right, valign = :bottom, orientation = :horizontal, tellheight = false, tellwidth = false, margin = (10, 31, 18, 40))
+    ["Solution and Number of Pulses"], halign = :right, valign = :bottom, orientation = :vertical, tellheight = false, tellwidth = false, margin = (10, 31, 18, 54))
 
     #figure[1,2] = legend
 
@@ -588,7 +588,7 @@ function plot_weights()
         weight_diff = _.weight_diff
     end
     global figure = Figure()
-    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Number of Pulses", ylabel = raw"Weight in grams", xlabelsize = 30, ylabelsize = 30,
+    global axis = GLMakie.Axis(figure[1, 1], xlabel = raw"Spray time in seconds", ylabel = raw"Weight in grams", xlabelsize = 30, ylabelsize = 30,
     title = raw"Weight of coating based on number of pulses", titlesize = 30)
     GLMakie.lines!(axis, pulse, weight_diff, markersize = 5)
     display(figure)
